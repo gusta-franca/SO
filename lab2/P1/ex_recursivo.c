@@ -1,3 +1,7 @@
+// Exemplo de programa que gera processos filho recursivamente indefinidamente
+// Criado em 29/03/2026
+// Autor: Gustavo Martins França
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/types.h>

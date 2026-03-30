@@ -1,3 +1,7 @@
+// Exemplo de programa que cria uma árvore binária completa de processos
+// Criado em 29/03/2026
+// Autor: Gustavo Martins França
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -28,7 +32,7 @@ void create_process_hierarchy(int n) {
             
             create_process_hierarchy(n-1);
 
-            exit(n);
+            // exit(n);
         }
     }
         
