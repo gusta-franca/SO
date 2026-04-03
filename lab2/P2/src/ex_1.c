@@ -28,11 +28,9 @@ void create_process_hierarchy(int n) {
         }
 
         if (pid_child == 0) {
-            // printf("Sou o processo filho %d; Pai:   %d\n", getpid(), getppid());
-            
             create_process_hierarchy(n-1);
 
-            // exit(n);
+            exit(n);
         }
     }
         
@@ -44,13 +42,12 @@ void create_process_hierarchy(int n) {
         pid_child_finalized = wait(&status);
 
         if (WIFEXITED(status)) {
-            // printf("Filho %d retornou com código %d\n", pid_child_finalized, WEXITSTATUS(status));
             printf("Pai %d, Filho %d, n = %d\n", getpid(), pid_child_finalized, WEXITSTATUS(status));
         }
     }
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     int n = 3;
 
     if (argc > 1) {

@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 
+// Preenche um vetor com valores inteiros semi-aleatórios
 void fill_vector_random(int *v, int n) {
     for (int i = 0; i < n; i++) {
         v[i] = rand() % n;
@@ -18,7 +19,7 @@ void fill_vector_random(int *v, int n) {
     printf("\n");
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     int value = 4;
     int num_process = 3;
     int size_vector = 10;
@@ -56,7 +57,8 @@ int main(int argc, char **argv) {
         }
 
         if (pid_child == 0) {
-            // Um mesmo filho pode encontrar o valor em mais de uma posição, portanto cada processo tem um vetor de índices
+            // Um mesmo filho pode encontrar o valor em mais de uma posição, 
+            // portanto cada processo tem um vetor de índices
             int indexes_found[index_end - index_start];
             int found_count = 0;
 
@@ -75,13 +77,12 @@ int main(int argc, char **argv) {
     }
 
     int status;
-    pid_t pid_child_finalized;
 
     int found_any = 0;
 
     // Espera todos os processos filho finalizarem
     for (int i = 0; i < num_process; i++) {
-        pid_child_finalized = wait(&status);
+        wait(&status);
 
         if (WIFEXITED(status)) {
             if (WEXITSTATUS(status) == 1) {

@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     if (argc < 2) {
         printf("Nenhum comando recebido.\n");
 
@@ -17,22 +17,26 @@ int main(int argc, char **argv) {
     }
 
     pid_t pid_child;
-    int value = 0;
 
     pid_child = fork();
 
     if (pid_child == 0) {
-        char *cmd[argc];
+        // Separa o comando em 
+        char* cmd[argc];
         for (int i = 0; i < argc-1; i++) {
             cmd[i] = argv[i+1];
         }
         cmd[argc-1] = NULL;
+        
+        char* bin_path = "/usr/bin/";
 
-        char path_cmd[9 + strlen(cmd[0])];
-        sprintf(path_cmd, "/usr/bin/%s", cmd[0]);
+        char path_cmd[strlen(bin_path) + strlen(cmd[0])];
+        sprintf(path_cmd, "%s%s", bin_path, cmd[0]);
         
         if (execv(path_cmd, cmd) == -1) {
-            printf("Comando não existente\n");
+            printf("Comando não encontrado\n");
+
+            // Inalcançável se execv executar
             exit(1);
         }
     }
@@ -41,6 +45,7 @@ int main(int argc, char **argv) {
         int status;
         pid_t pid_child_finalized;
 
+        // Aguarda o processo filho terminar
         pid_child_finalized = wait(&status);
 
         if (WIFEXITED(status)) {
