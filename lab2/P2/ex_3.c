@@ -39,7 +39,6 @@ int main(int argc, char **argv) {
     int index_start = 0;
     int index_end = size_subvector;
 
-    // Cria-se um processo para para parte
     pid_t pid_child;
     
     for (int i = 0; i < num_process; i++) {
@@ -47,6 +46,7 @@ int main(int argc, char **argv) {
         index_start = i * size_subvector;
         index_end = (i == num_process-1) ? size_vector : (index_start + size_subvector);
         
+        // Cria-se um processo para caad parte
         pid_child = fork();
 
         if (pid_child < 0) {
@@ -56,7 +56,7 @@ int main(int argc, char **argv) {
         }
 
         if (pid_child == 0) {
-            // Um mesmo filho pode encontrar o valor em mais de uma posição
+            // Um mesmo filho pode encontrar o valor em mais de uma posição, portanto cada processo tem um vetor de índices
             int indexes_found[index_end - index_start];
             int found_count = 0;
 
@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
                 printf("Filho %d encontrou na posição %d\n", getpid(), indexes_found[k]);
             }
 
-            exit(found_count > 0 ? 0 : 1);
+            exit(found_count > 0 ? 1 : 0);
         }
     }
 
@@ -84,13 +84,13 @@ int main(int argc, char **argv) {
         pid_child_finalized = wait(&status);
 
         if (WIFEXITED(status)) {
-            if (WEXITSTATUS(status) == 0) {
+            if (WEXITSTATUS(status) == 1) {
                 found_any = 1;
             }
         }
     }
 
-    if (found_any == 0) {
+    if (!found_any) {
         printf("Pai %d: valor %d não foi encontrado\n", getpid(), value);
     } 
 
