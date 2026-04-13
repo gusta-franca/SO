@@ -1,5 +1,5 @@
-// Exemplo de programa que executa um comando via terminalcomo processo filho
-// Criado em 29/03/2026
+// Exemplo de programa que 
+// Criado em 12/04/2026
 // Autor: Gustavo Martins França
 
 #include <unistd.h>

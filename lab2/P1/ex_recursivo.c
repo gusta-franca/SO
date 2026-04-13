@@ -1,4 +1,4 @@
-// Exemplo de programa que gera processos filho recursivamente indefinidamente
+// Exemplo de programa que gera processos filho indefinidamente
 // Criado em 29/03/2026
 // Autor: Gustavo Martins França
 
