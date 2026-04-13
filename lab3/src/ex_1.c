@@ -13,9 +13,10 @@
 
 // Estrutura para passar os parâmetros para os threads
 struct data_chunk {
-    int num_seq;
-    int val;
-    int start, end;
+    int num_seq,
+        val,
+        start,
+        end;
     int* vec;
 };
 
