@@ -5,11 +5,6 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
-
 
 // Estrutura para passar os parâmetros para os threads
 struct data_chunk {

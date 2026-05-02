@@ -2,17 +2,13 @@
 // Criado em 12/04/2026
 // Autor: Gustavo Martins França
 
-// PROBLEMA: matrizes com M e/ou N suficientemente grandes
+#define _POSIX_C_SOURCE 199309L
 
 #include <math.h>
 #include <pthread.h>
-#include <stdio.h>  
+#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 #include <time.h>
-#include <unistd.h>
 
 
 // Estrutura para passar os parâmetros para os threads
@@ -38,6 +34,10 @@ double* geometric_means;
 int** matrix;
 
 int main(int argc, char** argv) {
+    // Cálculo de tempo considerando todo o programa
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+
     int num_threads = 3;
     int m = 6;
     int n = 8;
@@ -45,8 +45,12 @@ int main(int argc, char** argv) {
     // É possível redefinir os parâmetros acima via terminal
     if (argc > 1) num_threads = atoi(argv[1]);
 
-    if (argc > 3) {
+    if (argc > 2) {
         m = atoi(argv[2]);
+        n = m;
+    }
+
+    if (argc > 3) {
         n = atoi(argv[3]);
     }
 
@@ -58,28 +62,26 @@ int main(int argc, char** argv) {
     }
 
     fill_matrix_random(matrix, m, n);
-
-    clock_t begin = clock();
-
+    
     // Cada thread pega um workload de tasks para processar
     int total_tasks = m+n;
     int workload = total_tasks / num_threads;
-
+    
     int task_start = 0;
     int task_end = workload;
-
+    
     struct data_chunk data[num_threads];
-
+    
     for (int k = 0; k < num_threads; k++) {
         data[k].start = task_start;
         data[k].end = task_end;
         data[k].m = m;
         data[k].n = n;
-
+        
         task_start += workload;
         task_end += workload;
     }
-
+    
     data[num_threads-1].end = total_tasks;
 
     pthread_t threads[num_threads];
@@ -94,10 +96,6 @@ int main(int argc, char** argv) {
         pthread_join(threads[j], NULL);
     }
 
-    clock_t end = clock();
-    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("Execution time: %f\n", time_spent);
-
     save_results(m, n);
 
     free(means);
@@ -107,6 +105,12 @@ int main(int argc, char** argv) {
     }
     free(matrix);
 
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    double time_spent;
+    time_spent = (end.tv_sec - start.tv_sec) * 1e9;
+    time_spent = (time_spent + (end.tv_nsec - start.tv_nsec)) * 1e-9;
+    printf("Execution time: %f\n", time_spent);
+
     return 0;
 }
 
@@ -114,13 +118,13 @@ int main(int argc, char** argv) {
 void fill_matrix_random(int **matrix, int m, int n) {
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
-            matrix[i][j] = rand() % (m*n); 
+            matrix[i][j] = 1 + rand() % (m+n); 
 
-            // printf("%d ", matrix[i][j]);
+            printf("%4d", matrix[i][j]);
         }
-        // printf("\n");
+        printf("\n");
     }
-    // printf("\n");
+    printf("\n");
 }
 
 
@@ -163,14 +167,14 @@ void save_results(int m, int n) {
         return;
     }
 
-    fprintf(file, "Matrix (%dx%d):\n", m, n);
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++) {
-            fprintf(file, "%4d ", matrix[i][j]);
-        }
-        fprintf(file, "\n");
-    }
-    fprintf(file, "\n");
+    // fprintf(file, "Matrix (%dx%d):\n", m, n);
+    // for (int i = 0; i < m; i++) {
+    //     for (int j = 0; j < n; j++) {
+    //         fprintf(file, "%4d ", matrix[i][j]);
+    //     }
+    //     fprintf(file, "\n");
+    // }
+    // fprintf(file, "\n");
 
     fprintf(file, "Means:\n");
     for (int i = 0; i < m; i++) {
@@ -182,7 +186,7 @@ void save_results(int m, int n) {
         fprintf(file, "Column %d: %f\n", i+1, geometric_means[i]);
     }
 
-    printf("Results saved in %s\n", filepath);
+    // printf("Results saved in %s\n", filepath);
 
     fclose(file);
 }
