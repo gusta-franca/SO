@@ -1,3 +1,7 @@
+// Exemplo de programa que usa memória compartilhada entre processos em uma hierarquia de modo que seja realizada a soma de dois vetores
+// Criado em 04/05/2026
+// Autor: Gustavo Martins França
+
 #include <ctype.h>
 #include <fcntl.h>
 #include <pthread.h>

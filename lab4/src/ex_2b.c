@@ -1,3 +1,7 @@
+// Exemplo de programa que permite uma finalização limpa de um processo
+// Criado em 03/05/2026
+// Autor: Gustavo Martins França
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>

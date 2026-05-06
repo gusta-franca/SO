@@ -3,6 +3,7 @@ BUILD_DIR := build
 
 CC := gcc
 CFLAGS := -Wall -Wextra -g
+LDLIBS := -lrt
 
 SOURCES := $(wildcard $(SRC_DIR)/*.c)
 BINARIES := $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%, $(SOURCES))

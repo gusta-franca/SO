@@ -1,3 +1,7 @@
+// Exemplo de programa que atua como cliente de um canal FIFO
+// Criado em 03/05/2026
+// Autor: Gustavo Martins França
+
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
